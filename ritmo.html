@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Los Guardianes del Ritmo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+            color: #f8fafc;
+            touch-action: manipulation;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, .cyber-font {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .neon-box {
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.3), inset 0 0 10px rgba(139, 92, 246, 0.2);
+            border: 1px solid #8b5cf6;
+        }
+
+        .neon-btn {
+            transition: all 0.2s ease;
+            box-shadow: 0 0 10px rgba(14, 165, 233, 0.5);
+        }
+        .neon-btn:active:not(:disabled) {
+            transform: scale(0.95);
+            box-shadow: 0 0 2px rgba(14, 165, 233, 0.8);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease-in-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hidden-phase {
+            display: none !important;
+        }
+        
+        /* Barra de progreso */
+        .progress-bar {
+            transition: width 1s ease-in-out;
+        }
+    </style>
+</head>
+<body class="p-4 flex flex-col items-center min-h-screen">
+
+    <!-- HUD (Heads Up Display) - Interfaz superior -->
+    <div class="w-full max-w-md flex justify-between items-center mb-6 p-3 bg-slate-800 rounded-xl border border-slate-700">
+        <div class="flex items-center gap-2">
+            <span class="text-2xl">⚡</span>
+            <div>
+                <div class="text-xs text-sky-400 font-bold cyber-font">ENERGÍA DEL NÚCLEO</div>
+                <div class="w-32 h-3 bg-slate-900 rounded-full mt-1 overflow-hidden">
+                    <div id="energy-bar" class="h-full bg-gradient-to-r from-purple-500 to-sky-400 progress-bar" style="width: 0%;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="text-right">
+            <div class="text-xs text-slate-400">ODS 3</div>
+            <div class="text-sm font-bold text-emerald-400">Salud y Bienestar</div>
+        </div>
+    </div>
+
+    <!-- Contenedor Principal de Fases -->
+    <div class="max-w-md w-full bg-slate-800 rounded-2xl p-6 neon-box relative overflow-hidden">
+        
+        <!-- FASE 1: MOTIVACIÓN -->
+        <div id="phase-1" class="fade-in text-center">
+            <div class="text-6xl mb-4">🥷</div>
+            <h1 class="text-2xl font-bold text-purple-400 mb-2 cyber-font">LA LLAMADA</h1>
+            <p class="text-slate-300 mb-6 leading-relaxed">
+                El villano <strong>"El Silencio"</strong> ha robado el movimiento de nuestro instituto. El sedentarismo se propaga. Eres nuestra única esperanza para reactivar el Núcleo mediante la música y la expresión corporal.
+            </p>
+            <button onclick="nextPhase(2, 20)" class="neon-btn w-full bg-purple-600 text-white font-bold py-4 rounded-xl text-lg cyber-font">
+                ACEPTAR MISIÓN
+            </button>
+        </div>
+
+        <!-- FASE 2: ACTIVACIÓN -->
+        <div id="phase-2" class="fade-in hidden-phase text-center">
+            <h1 class="text-xl font-bold text-sky-400 mb-2 cyber-font">NIVEL 1: SENSORES</h1>
+            <p class="text-sm text-slate-300 mb-6">Escucha el patrón rítmico y selecciona la acción motriz que le corresponde para calibrar tu cuerpo.</p>
+            
+            <div class="bg-slate-900 p-4 rounded-xl mb-6 border border-slate-700">
+                <button onclick="playTempo('slow')" class="w-full bg-slate-700 hover:bg-slate-600 text-white py-3 rounded-lg mb-4 flex items-center justify-center gap-2 font-bold">
+                    <span>🔊</span> Escuchar Ritmo A
+                </button>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="checkAnswer('slow', 'caminar', this)" class="bg-slate-800 border border-slate-600 p-3 rounded-lg text-sm active:bg-sky-900">Caminar lento</button>
+                    <button onclick="checkAnswer('slow', 'correr', this)" class="bg-slate-800 border border-slate-600 p-3 rounded-lg text-sm active:bg-sky-900">Correr rápido</button>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 p-4 rounded-xl mb-6 border border-slate-700">
+                <button onclick="playTempo('fast')" class="w-full bg-slate-700 hover:bg-slate-600 text-white py-3 rounded-lg mb-4 flex items-center justify-center gap-2 font-bold">
+                    <span>🔊</span> Escuchar Ritmo B
+                </button>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="checkAnswer('fast', 'estirar', this)" class="bg-slate-800 border border-slate-600 p-3 rounded-lg text-sm active:bg-sky-900">Estiramiento</button>
+                    <button onclick="checkAnswer('fast', 'saltar', this)" class="bg-slate-800 border border-slate-600 p-3 rounded-lg text-sm active:bg-sky-900">Saltos rápidos</button>
+                </div>
+            </div>
+
+            <button id="btn-next-2" onclick="nextPhase(3, 40)" class="neon-btn w-full bg-sky-600 text-white font-bold py-4 rounded-xl text-lg cyber-font hidden opacity-50" disabled>
+                SISTEMA CALIBRADO ➡️
+            </button>
+        </div>
+
+        <!-- FASE 3: EXPLORACIÓN -->
+        <div id="phase-3" class="fade-in hidden-phase text-center">
+            <h1 class="text-xl font-bold text-pink-400 mb-2 cyber-font">NIVEL 2: PERCUSIÓN</h1>
+            <p class="text-sm text-slate-300 mb-6">El cuerpo es tu instrumento. Toca los botones para ensayar patrones motores y sonoros.</p>
+            
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <button onclick="playDrum('kick')" class="neon-btn bg-slate-700 h-24 rounded-xl flex flex-col items-center justify-center border-2 border-pink-500 active:bg-pink-900">
+                    <span class="text-3xl mb-1">🦶</span>
+                    <span class="text-xs font-bold cyber-font">PISOTÓN</span>
+                </button>
+                <button onclick="playDrum('clap')" class="neon-btn bg-slate-700 h-24 rounded-xl flex flex-col items-center justify-center border-2 border-yellow-500 active:bg-yellow-900">
+                    <span class="text-3xl mb-1">👏</span>
+                    <span class="text-xs font-bold cyber-font">PALMAS</span>
+                </button>
+                <button onclick="playDrum('chest')" class="neon-btn bg-slate-700 h-24 rounded-xl flex flex-col items-center justify-center border-2 border-emerald-500 active:bg-emerald-900">
+                    <span class="text-3xl mb-1">🦍</span>
+                    <span class="text-xs font-bold cyber-font">PECHO</span>
+                </button>
+                <button onclick="playDrum('snap')" class="neon-btn bg-slate-700 h-24 rounded-xl flex flex-col items-center justify-center border-2 border-sky-500 active:bg-sky-900">
+                    <span class="text-3xl mb-1">🫰</span>
+                    <span class="text-xs font-bold cyber-font">CHASQUIDO</span>
+                </button>
+            </div>
+
+            <button onclick="nextPhase(4, 60)" class="neon-btn w-full bg-pink-600 text-white font-bold py-4 rounded-xl text-lg cyber-font">
+                ENTRENAMIENTO COMPLETADO ➡️
+            </button>
+        </div>
+
+        <!-- FASE 4: APLICACIÓN -->
+        <div id="phase-4" class="fade-in hidden-phase text-center">
+            <h1 class="text-xl font-bold text-emerald-400 mb-2 cyber-font">NIVEL 3: LA BATALLA</h1>
+            <p class="text-sm text-slate-300 mb-6">Graba con tu equipo una coreografía de 15 segundos uniendo la percusión corporal que habéis practicado.</p>
+            
+            <div class="bg-slate-900 p-6 rounded-xl mb-6 border-2 border-dashed border-emerald-500">
+                <div class="text-5xl mb-4">🎥</div>
+                <!-- El atributo capture="environment" abre la cámara de vídeo trasera en móviles -->
+                <input type="file" id="video-upload" accept="video/*" capture="environment" class="hidden" onchange="videoUploaded()">
+                <label for="video-upload" class="neon-btn inline-block bg-emerald-600 text-white font-bold py-3 px-6 rounded-lg cursor-pointer cyber-font mb-2">
+                    GRABAR COREOGRAFÍA
+                </label>
+                <p class="text-xs text-slate-400 mt-2" id="upload-status">Esperando vídeo...</p>
+            </div>
+
+            <button id="btn-next-4" onclick="nextPhase(5, 80)" class="neon-btn w-full bg-emerald-700 text-white font-bold py-4 rounded-xl text-lg cyber-font hidden">
+                ENVIAR ATAQUE CINÉTICO ➡️
+            </button>
+        </div>
+
+        <!-- FASE 5: EVALUACIÓN -->
+        <div id="phase-5" class="fade-in hidden-phase text-center">
+            <h1 class="text-xl font-bold text-amber-400 mb-2 cyber-font">EL BALANCE FINAL</h1>
+            <p class="text-sm text-slate-300 mb-6">Evalúa el desempeño de tu equipo para liberar la energía restante y derrotar a "El Silencio".</p>
+            
+            <div class="text-left bg-slate-900 p-4 rounded-xl mb-6">
+                <label class="block text-sm font-bold text-sky-400 mb-1">Sincronización Motora</label>
+                <input type="range" min="1" max="10" value="5" class="w-full mb-4 accent-sky-500">
+                
+                <label class="block text-sm font-bold text-pink-400 mb-1">Creatividad Musical</label>
+                <input type="range" min="1" max="10" value="5" class="w-full mb-4 accent-pink-500">
+                
+                <label class="block text-sm font-bold text-emerald-400 mb-1">Trabajo en Equipo</label>
+                <input type="range" min="1" max="10" value="5" class="w-full mb-4 accent-emerald-500">
+            </div>
+
+            <button onclick="finalVictory()" class="neon-btn w-full bg-gradient-to-r from-purple-600 to-sky-600 text-white font-bold py-4 rounded-xl text-lg cyber-font">
+                ⚡ LIBERAR ENERGÍA ⚡
+            </button>
+        </div>
+
+        <!-- PANTALLA VICTORIA -->
+        <div id="phase-victory" class="fade-in hidden-phase text-center py-8">
+            <div class="text-7xl mb-6">🌍</div>
+            <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-sky-400 mb-2 cyber-font">¡VICTORIA!</h1>
+            <p class="text-slate-300 text-lg mb-6">
+                El instituto vuelve a moverse. Habéis demostrado que el ritmo y el deporte son nuestra mejor energía.
+            </p>
+            <button onclick="location.reload()" class="border-2 border-slate-500 text-slate-300 font-bold py-2 px-6 rounded-lg hover:bg-slate-700">
+                Reiniciar Misión
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Motor de Audio en JavaScript -->
+    <script>
+        // API de Audio nativa del navegador
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // Función para generar pitidos (Ritmo lento y rápido)
+        function playTempo(type) {
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            let count = 0;
+            const maxBeeps = type === 'slow' ? 3 : 6;
+            const interval = type === 'slow' ? 800 : 300; // milisegundos
+
+            const intervalId = setInterval(() => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(type === 'slow' ? 300 : 600, audioCtx.currentTime);
+                
+                gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.1);
+                
+                count++;
+                if(count >= maxBeeps) clearInterval(intervalId);
+            }, interval);
+        }
+
+        // Función para simular percusión corporal
+        function playDrum(type) {
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            const now = audioCtx.currentTime;
+            
+            if (type === 'kick') { // Pisotón: Grave y seco
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.exponentialRampToValueAtTime(0.01, now + 0.5);
+                gain.gain.setValueAtTime(1, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'clap') { // Palmas: Ruido blanco simulado (acordes agudos)
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(800, now);
+                gain.gain.setValueAtTime(0.5, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            } else if (type === 'chest') { // Pecho: Medio grave
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(200, now);
+                gain.gain.setValueAtTime(0.8, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            } else if (type === 'snap') { // Chasquido: Muy agudo y rápido
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(1500, now);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                osc.start(now);
+                osc.stop(now + 0.05);
+            }
+        }
+
+        // Lógica de navegación y validación
+        let sensor1 = false;
+        let sensor2 = false;
+
+        function checkAnswer(type, answer, btnElement) {
+            const isCorrect = (type === 'slow' && answer === 'caminar') || (type === 'fast' && answer === 'saltar');
+            
+            // Restablecer estilos del grupo
+            const siblings = btnElement.parentElement.children;
+            for(let btn of siblings) {
+                btn.classList.remove('bg-green-600', 'bg-red-600', 'text-white');
+                btn.classList.add('bg-slate-800');
+            }
+
+            if (isCorrect) {
+                btnElement.classList.replace('bg-slate-800', 'bg-green-600');
+                if(type === 'slow') sensor1 = true;
+                if(type === 'fast') sensor2 = true;
+                
+                // Si ambos correctos, habilitar botón siguiente
+                if(sensor1 && sensor2) {
+                    const nextBtn = document.getElementById('btn-next-2');
+                    nextBtn.classList.remove('hidden', 'opacity-50');
+                    nextBtn.disabled = false;
+                }
+            } else {
+                btnElement.classList.replace('bg-slate-800', 'bg-red-600');
+            }
+        }
+
+        function videoUploaded() {
+            document.getElementById('upload-status').innerHTML = "✅ ¡Vídeo encriptado y preparado!";
+            document.getElementById('upload-status').classList.replace('text-slate-400', 'text-emerald-400');
+            document.getElementById('btn-next-4').classList.remove('hidden');
+        }
+
+        function updateEnergy(percentage) {
+            document.getElementById('energy-bar').style.width = percentage + '%';
+        }
+
+        function nextPhase(nextId, energy) {
+            // Ocultar todas las fases
+            const phases = document.querySelectorAll('[id^="phase-"]');
+            phases.forEach(p => p.classList.add('hidden-phase'));
+            
+            // Mostrar la nueva fase
+            document.getElementById('phase-' + nextId).classList.remove('hidden-phase');
+            updateEnergy(energy);
+            
+            // Iniciar contexto de audio si es necesario por reglas de navegadores
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+        }
+
+        function finalVictory() {
+            updateEnergy(100);
+            const phases = document.querySelectorAll('[id^="phase-"]');
+            phases.forEach(p => p.classList.add('hidden-phase'));
+            document.getElementById('phase-victory').classList.remove('hidden-phase');
+            
+            // Acorde de victoria
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // Nota Do
+            gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 2);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 2);
+        }
+    </script>
+</body>
+</html>
